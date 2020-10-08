@@ -75,3 +75,8 @@ a:active {
   margin: 20px;
   overflow-wrap: break-word;
 }
+
+.selected-language {
+  display: inline;
+  border: 3px solid var(--h-color);
+}

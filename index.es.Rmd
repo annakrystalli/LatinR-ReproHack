@@ -1,0 +1,264 @@
+---
+title: "LatinR 2020 ReproHack!"
+output:
+    html_document:
+        theme: flatly
+        css: reprohack.css
+params: 
+  title: "LatinR 2020 ReproHack!"
+  room_location: "Blackboard Collaborate"
+  address: "Evento online"
+  date: "8 de octubre de 2020"
+  time: "10:00am - 17:00pm UTC - 3"
+  bannerurl: "latinr_banner.png"
+  registration_url: https://www.eventbrite.com.ar/o/reprohack-en-latinr-31351318695 
+  hackpad_url: http://bit.ly/reprohack_latinr2020
+  submission_url: https://forms.gle/vMk25vCevMg2QiYQ9
+  reprohack_repo_url: https://github.com/reprohack/LatinR-ReproHack
+  submission_form_title: "ReproHack Paper Submission Form - n8"
+  feedback_form_title: "ReproHack feedback form - n8"
+runtime: shiny
+---
+
+![](`r params$bannerurl`)
+
+# **`r params$title`**
+## _Hackatón de Reproducibilidad de un día_
+
+<br>
+
+#### **`r shiny::icon("clock")` `r params$time`**
+#### **`r shiny::icon("calendar")` `r params$date`**
+#### **`r shiny::icon("map-marker-alt")` `r params$room_location`**
+#### **`r shiny::icon("map-marked-alt")` `r params$address`**
+`r shiny::icon("language")` [`r emo::ji("uk")`](https://sheffield-university.shinyapps.io/latinr2020-reprohack/)<div class='selected-language'>[`r emo::ji("es")`](https://sheffield-university.shinyapps.io/latinr2020-reprohack-es/)</div>
+
+
+
+```{r, echo = F, results='asis'}
+if(!is.null(params$registration_url)){
+  cat(paste0("### [**REGISTER**](", params$registration_url, ")"))
+}
+```
+
+
+[![Slack](https://img.shields.io/badge/slack-join%20us-brightgreen)](https://reprohack-autoinvite.herokuapp.com/)
+
+
+##### [ReproHack hackpad](`r params$hackpad_url`): contiene detalles para los participantes
+
+***
+
+# **Bienvenido a `r emo::ji("wave")` **
+
+Estamos muy felices por el progreso logrado por muchos autores para **hacer que sus artículos sean reproducibles asociando código y datos**.
+ 
+Sabemos que puede ser muy desafiante por eso **queremos destacar el valor de la práctica**, tanto para los autores originales y como una experiencia de aprendizaje para quienes intentan reproducir el trabajo. 
+
+
+## **Formato del evento**:
+
+Durante un ReproHack, **los participantes intentan reproducir investigaciones publicadas de una lista de artículos propuestos que tiene públicamente disponible código y datos asociados**. Los particpantes trabajan con el material de otras personas en un ambiente de baja presion y registran sus experiencias en varios aspectos claves, que incluyen reproducibilidad, transparencia y reutilización de materiales. Al final del día nos reagrupamos, compartimos nuestras experiencias y le damos una devolución a los autores.
+
+Es indispensable destacar que **ReproHacks no son de ningún modo un intento de criticar o desacreditar trabajos**. Creemos que reproducir trabajos es **una actividad científica beneficiosa en sí misma**, con resultados útiles para los autores y expretiencias de aprendizaje valioso para los participantes y la comunidad científica-académica.
+
+
+***
+
+## **Maneras para participar**
+
+<br>
+
+### `r shiny::icon("newspaper")`  **Propone un artículo**
+
+##### Haz puesto mucho esfuerzo en lograr que tu trabajo sea reproducible. ¡Ahora dejemos que la gente aprenda de él y se involucre!
+
+Beneficios para los autores:
+
+- **Feedback** sobre la reproducibilidad de tu trabajo.
+
+- **Reconocimiento** por tus esfuerzo para hacer que tu trabajo sea reproducible.
+
+- Oportunidad para que   **otros se invoucren con tu investigación**.
+
+<br>
+
+### `r shiny::icon("redo-alt")`  **Reproduce**
+
+##### Únete al ReproHack  y empieza a trabajar con el material de otras personas.
+
+Beneficios para los participantes:
+
+- **Experiencia práctica en reproducibilidad** con materiales reales publicados y la oportunidad de explorar diversas herramientas y estrategias.
+
+- **Inspiración** al trabajar con códigos y datos de otras personas.
+
+- El reconocimiento de que la **reproducibilidad no es trivial** sino que ampliar tu trabajo hacia mas personas que se involucren es el mejor modo para poder mejorarlo. 
+
+- Una aprecición que la **reproducibilidad tiene valor comunitario que va más allá de solo validación de resultados**. Por ejemplo, acceso a tales materiales aumenta el potencial de que se reutilize y se comprenda el trabajo.
+
+
+**Beneficio para la comunidad que trabaja en investigación:**
+
+- Apreciación  de cuan los artículos reproducibles son ‘out of the box’.
+
+- Evaluar como son las practicas  actuales existosas y que propósitos tienen
+
+- Identificar qué funciona y donde se encuentran las debilidades mas marcadas en nuestros enfoques.
+
+<br>
+
+
+Mantenete al tanto de discusiones y links a los resultados de nuestras sesiones en el evento [**hackpad**](`r params$hackpad_url`)
+
+***
+
+# **PROPONE**
+### **Nomina un artículo para ser reproducido:**
+
+
+ 
+Invitamos nominaciones para trabajos que tengan asociados **código** y **datos** disponibles públicamente. También fomentamos los análisis basados en herramientas de código abierto, ya que no podemos garantizar que los participantes tengan acceso a softwares con licencias especializadas.
+
+
+```{r, echo=FALSE}
+library("shiny")
+wellPanel(a("Nominar Artículo", class = "btn btn-primary btn-md",
+            href = params$submission_url))
+```
+
+
+## **Artículos propuestos:**
+
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, eval=require('googlesheets4')}
+library(googlesheets4)
+options(gargle_oauth_cache = ".secrets",
+        gargle_oauth_email = "annakrystalli@googlemail.com")
+#googlesheets4::sheets_auth()
+googledrive::drive_auth()
+```
+
+```{r, echo=FALSE}
+print_contact_links <- function(responses, i){
+  row <- responses[i, ]
+  twitter <- if(!is.na(row[,"Twitter handle (optional)"])){
+    twitter_url <- paste0("https://twitter.com/", gsub(" *@ *", "", row[,"Twitter handle (optional)"]))
+    paste0("[<i class='fa fa-twitter'/>](", twitter_url,")")}else{NULL}
+  
+  github <- if(!is.na(row[,"GitHub username (optional)"])){
+    github_url <- paste0("https://github.com/", gsub(" *@ *", "", row[,"GitHub username (optional)"]))
+    paste0("[<i class='fa fa-github'/>](", github_url,")")}else{NULL}
+  
+  feedback <- if(row[, "Would you like to receive a copy of any feedback on the paper?"] == "Yes"){
+    "<i class='fa fa-comment-dots'/>"}else{NULL}
+  public <- if(row[,"Can feedback on your paper be made public?"] == "Yes"){
+    "<i class='fa fa-globe'/>"}else{NULL}
+  
+  return(paste(twitter, github, feedback, public))
+}
+```
+
+
+```{r, message=FALSE, results='asis', warning=FALSE,  echo=FALSE}
+match_length <- 45
+
+responses_gs <- sheets_find(paste(params$submission_form_title))
+responses <- sheets_read(responses_gs) %>% 
+    dplyr::mutate(match_name = stringr::str_trunc(.data$`Paper title`, match_length) )
+
+
+
+
+
+# load feedback
+feedback_gs <- sheets_find(paste(params$feedback_form_title))
+feedback <- sheets_read(feedback_gs) %>% 
+    dplyr::mutate(match_name = stringr::str_trunc(.data$`Which paper did you attempt?`, match_length) )
+
+responses_joined <- fuzzyjoin::stringdist_left_join(feedback, responses, 
+                                             by = c(match_name = "match_name"),
+                                             max_dist = 10,
+                                             method = "qgram",
+                                             #method = "cosine",
+                                             ignore_case = TRUE) %>%
+    dplyr::select(.data$`Paper title`,
+                  .data$`Which paper did you attempt?`, dplyr::everything()) %>%
+    assertr::verify(!is.na(.data$`Which paper did you attempt?`))
+
+stats <- dplyr::group_by(responses_joined, .data$`Paper title`) %>%
+    dplyr::summarise(no_attempts = dplyr::n(),
+                     mean_repro = mean(.data$`On a scale of 1 to 10, how much of the paper did you manage to reproduce?`) %>%
+                         round())
+
+
+responses <- dplyr::left_join(responses, stats)
+
+
+row_n <- nrow(responses)
+set.seed(12345)
+
+if(row_n > 0){
+  
+  random_ids <- sample.int(row_n)
+  for(j in seq_len(row_n)){
+    i <- random_ids[j]
+    cat("<div class='card'>")
+    cat('\n')     
+    cat('\n')
+    cat('\n')
+    cat("### **", j,". ", as.character(responses[i, "Paper title"]), "**", "\n", "\n", sep = "")
+    cat("**", gsub("\n", "", gsub("[*]", "", as.character(responses[i, "Paper citation"]))), "\n**", "\n", "\n", sep = "")
+    cat("##### *submitted by ", as.character(responses[i, "Name"]),  print_contact_links(responses, i), "*", "\n")
+    if(!is.na(responses[i, "no_attempts"])){
+    cat("*No. attempts <i class='fa fa-recycle'/>* ", as.character(responses[i, "no_attempts"]), "\n") 
+      cat("*Mean Repro Score <i class='fas fa-check-circle' />* ", as.character(responses[i, "mean_repro"]), "/10 \n\n")
+    }
+    cat('\n')
+    cat('\n')
+    cat("**Why should we attempt to reproduce this paper?**", "\n", "\n")
+    cat(as.character(responses[i, "Why should we attempt to reproduce this paper?"]), "\n")
+    cat('\n')
+    cat("**Paper URL:** [", as.character(responses[i, "Paper URL"]),"](",as.character(responses[i, "Paper URL"]) ,")", "\n")
+    cat('\n')
+    cat("**Data URL:**", as.character(responses[i, "Data URL"]), "\n")
+    cat('\n')
+    cat("**Code URL:**", as.character(responses[i, "Code URL"]), "\n")
+    cat('\n', "\n")
+    cat("**Useful programming skills:**", as.character(responses[i, "Useful programming skills"]), "\n")
+    cat("</div>")
+    cat('\n', "\n",'\n')
+  }
+  
+}
+```
+
+
+
+```{r, echo=FALSE}
+wellPanel(a("Actualizar lista de Artículos", class = "btn btn-primary btn-md",
+            href = "javascript:history.go(0)"))
+```
+
+
+
+***
+ 
+
+#### Si quieres ser anfitrión de un  ReproHack en tu institución, ¡por favor contactanos!
+
+
+<div class="pull-left">
+
+### Contacto
+
+Chatea con nosotros por [Slack](https://reprohack-autoinvite.herokuapp.com/) o correo electrónico [reprohack.team@gmail.com](mailto:reprohack.team@gmail.com).
+
+</div>
+
+<div class="pull-right">
+<img src="https://www.software.ac.uk/sites/default/files/images/content/SSI_Big300dpi.png" width="100%">
+</div>
+
+

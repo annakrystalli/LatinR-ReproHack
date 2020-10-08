@@ -31,9 +31,7 @@ runtime: shiny
 #### **`r shiny::icon("calendar")` `r params$date`**
 #### **`r shiny::icon("map-marker-alt")` `r params$room_location`**
 #### **`r shiny::icon("map-marked-alt")` `r params$address`**
-
-
-
+`r shiny::icon("language")` [`r emo::ji("es")`](https://sheffield-university.shinyapps.io/latinr2020-reprohack-es/)<div class='selected-language'>[`r emo::ji("uk")`](https://sheffield-university.shinyapps.io/latinr2020-reprohack/)</div>
 
 ```{r, echo = F, results='asis'}
 if(!is.null(params$registration_url)){
