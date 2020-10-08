@@ -160,7 +160,7 @@ print_contact_links <- function(responses, i){
 
 
 ```{r, message=FALSE, results='asis', warning=FALSE,  echo=FALSE}
-match_length <- 30
+match_length <- 45
 
 responses_gs <- sheets_find(paste(params$submission_form_title))
 responses <- sheets_read(responses_gs) %>% 
